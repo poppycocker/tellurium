@@ -1,5 +1,13 @@
-import OLCesium from 'olcs/olcesium'
 import olMap from 'ol/map'
+import olOsmSource from 'ol/source/osm'
+import olControl from 'ol/control'
+import olView from 'ol/view'
+import olLayerTile from 'ol/layer/tile'
+import olProj from 'ol/proj'
+import Cesium from 'cesium/Cesium'
+import OLCesium from 'olcs/olcesium'
+
+window.Cesium = Cesium
 
 class Tellurium {
   constructor() {
@@ -14,3 +22,32 @@ class Tellurium {
 export default () => {
   return new Tellurium()
 }
+
+const ol2d = new olMap({
+  layers: [
+    new olLayerTile({
+      source: new olOsmSource()
+    })
+  ],
+  controls: olControl.defaults({
+    attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+      collapsible: false
+    })
+  }),
+  target: 'map',
+  view: new olView({
+    center: olProj.transform([25, 20], 'EPSG:4326', 'EPSG:3857'),
+    zoom: 3
+  })
+})
+
+const ol3d = new OLCesium({
+  map: ol2d
+})
+const scene = ol3d.getCesiumScene()
+const terrainProvider = new Cesium.CesiumTerrainProvider({
+  url: '//assets.agi.com/stk-terrain/world',
+  requestVertexNormals: true
+})
+scene.terrainProvider = terrainProvider
+ol3d.setEnabled(true)
