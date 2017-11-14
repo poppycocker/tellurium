@@ -7,6 +7,8 @@ import olProj from 'ol/proj'
 import Cesium from 'cesium/Cesium'
 import OLCesium from 'olcs/olcesium'
 
+import style from 'ol/ol.css'
+
 window.Cesium = Cesium
 
 class Tellurium {

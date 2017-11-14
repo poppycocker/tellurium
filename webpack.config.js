@@ -45,7 +45,11 @@ module.exports = {
       },
       {
         test: /\/olcs\/.+\.js$/,
-        loader: "imports-loader?Cesium=cesium/Cesium"
+        loader: 'imports-loader?Cesium=cesium/Cesium'
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader'
       }
     ]
   },
