@@ -1,3 +1,4 @@
+import ol from './olreunion'
 import olMap from 'ol/map'
 import olOsmSource from 'ol/source/osm'
 import olControl from 'ol/control'
@@ -6,10 +7,12 @@ import olLayerTile from 'ol/layer/tile'
 import olProj from 'ol/proj'
 import Cesium from 'cesium/Cesium'
 import OLCesium from 'olcs/olcesium'
+import 'ol/ol.css'
 
-import style from 'ol/ol.css'
-
+// because expose-loader doesn't work.
+window.ol = ol
 window.Cesium = Cesium
+window.OLCesium = OLCesium
 
 class Tellurium {
   constructor() {
@@ -21,9 +24,12 @@ class Tellurium {
   }
 }
 
-export default () => {
+const tellurium = () => {
   return new Tellurium()
 }
+window.tellurium = tellurium
+
+export default tellurium
 
 const ol2d = new olMap({
   layers: [
