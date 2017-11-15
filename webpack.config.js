@@ -37,19 +37,15 @@ module.exports = {
     modules: ['node_modules', '../build/googshifted']
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
-      },
-      {
-        test: /\/olcs\/.+\.js$/,
-        loader: 'imports-loader?Cesium=cesium/Cesium'
+        use: [{ loader: 'babel-loader' }]
       },
       {
         test: /\.css$/,
-        loader: 'style-loader!css-loader'
+        use: ['style-loader', 'css-loader']
       }
     ]
   },
