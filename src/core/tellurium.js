@@ -1,10 +1,4 @@
-import ol from './olreunion'
-import olMap from 'ol/map'
-import olOsmSource from 'ol/source/osm'
-import olControl from 'ol/control'
-import olView from 'ol/view'
-import olLayerTile from 'ol/layer/tile'
-import olProj from 'ol/proj'
+import ol from 'olreunion'
 import Cesium from 'cesium/Cesium'
 import OLCesium from 'olcs/olcesium'
 import 'ol/ol.css'
@@ -31,31 +25,32 @@ window.tellurium = tellurium
 
 export default tellurium
 
-const ol2d = new olMap({
-  layers: [
-    new olLayerTile({
-      source: new olOsmSource()
+document.addEventListener('DOMContentLoaded', () => {
+  const ol2d = new ol.Map({
+    layers: [
+      new ol.layer.Tile({
+        source: new ol.source.OSM()
+      })
+    ],
+    controls: ol.control.defaults({
+      attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+        collapsible: false
+      })
+    }),
+    target: 'map',
+    view: new ol.View({
+      center: ol.proj.transform([25, 20], 'EPSG:4326', 'EPSG:3857'),
+      zoom: 3
     })
-  ],
-  controls: olControl.defaults({
-    attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
-      collapsible: false
-    })
-  }),
-  target: 'map',
-  view: new olView({
-    center: olProj.transform([25, 20], 'EPSG:4326', 'EPSG:3857'),
-    zoom: 3
   })
-})
 
-const ol3d = new OLCesium({
-  map: ol2d
+  const ol3d = new OLCesium({
+    map: ol2d
+  })
+  const scene = ol3d.getCesiumScene()
+  scene.terrainProvider = new Cesium.CesiumTerrainProvider({
+    url: '//assets.agi.com/stk-terrain/world',
+    requestVertexNormals: true
+  })
+  ol3d.setEnabled(true)
 })
-const scene = ol3d.getCesiumScene()
-const terrainProvider = new Cesium.CesiumTerrainProvider({
-  url: '//assets.agi.com/stk-terrain/world',
-  requestVertexNormals: true
-})
-scene.terrainProvider = terrainProvider
-ol3d.setEnabled(true)

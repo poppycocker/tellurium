@@ -34,7 +34,7 @@ module.exports = {
       cesium: path.resolve(__dirname, cesiumSource)
     },
     extensions: ['.js'],
-    modules: ['node_modules', '../build/googshifted']
+    modules: ['node_modules', '../build/googshifted', '../build/olreunion']
   },
   module: {
     rules: [
