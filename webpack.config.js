@@ -8,12 +8,14 @@ const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
 const cesiumSource = 'node_modules/cesium/Source'
 const cesiumWorkers = '../Build/Cesium/Workers'
 
+const resolve = dir => path.join(__dirname, dir)
+
 module.exports = {
   devtool: '#source-map',
   devServer: {
     contentBase: path.join(__dirname, '')
   },
-  entry: ['babel-polyfill', './src/core/tellurium.js'],
+  entry: ['babel-polyfill', './src/tellurium.js'],
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'tellurium.js',
@@ -30,11 +32,12 @@ module.exports = {
   },
   resolve: {
     alias: {
+      '@': resolve('src'),
       // Cesium module name
       cesium: path.resolve(__dirname, cesiumSource)
     },
     extensions: ['.js'],
-    modules: ['node_modules', '../build/googshifted', '../build/olreunion']
+    modules: ['node_modules', 'build/googshifted', 'build/olreunion', 'assets']
   },
   module: {
     rules: [
@@ -46,6 +49,10 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader']
+      },
+      {
+        test: /\.(png|svg|jpg|gif)$/,
+        use: ['file-loader']
       }
     ]
   },

@@ -1,0 +1,35 @@
+.ol-scale-line, .ol-scale-line-large {
+  background: #95b9e6;
+  background: rgba(0,60,136,0.6);
+  position: absolute;
+}
+.ol-scale-line {
+  border-radius: 4px;
+  bottom: 8px;
+  left: 8px;
+  padding: 2px;
+}
+.ol-scale-line-large {
+  border-radius: 8px;
+  bottom: 16px;
+  left: 16px;
+  padding: 4px;
+}
+
+.ol-scale-line-inner, .ol-scale-line-large-inner {
+  border-top: none;
+  color: #eeeeee;
+  font-weight: bold;
+  text-align: center;
+  will-change: contents, width;
+}
+.ol-scale-line-inner {
+  border: 1px solid #eeeeee;
+  font-size: 16px;
+  margin: 1px;
+}
+.ol-scale-line-large-inner {
+  border: 2px solid #eeeeee;
+  font-size: 32px;
+  margin: 2px;
+}

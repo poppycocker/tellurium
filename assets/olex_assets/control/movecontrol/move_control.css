@@ -1,0 +1,28 @@
+.move-control {
+  top: 120px;
+  right: 30px;
+}
+.move-control-large {
+  top: 240px;
+  right: 45px;
+}
+
+.ol-control .move-button,
+.ol-control .move-button-large {
+  background-image: url(move_control_bg.png);
+  background-size: cover;
+  cursor:pointer;
+}
+.ol-control .move-button {
+  height: 70px;
+  width: 70px;
+}
+.ol-control .move-button-large {
+  height: 140px;
+  width: 140px;
+}
+
+.ol-control ,
+.ol-control:hover{
+  background-color:transparent;
+}

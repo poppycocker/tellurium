@@ -138,9 +138,6 @@ ol.events = {}
 // both namespace and module: merge module to namespace
 import olcontrol__ from 'ol/control'
 Object.assign(ol.control, olcontrol__)
-// for ol.control.defaults
-import olcontrolDefaults from 'ol/control'
-Object.assign(ol.control, olcontrolDefaults)
 
 ol.Attribution = olAttribution
 ol.CanvasMap = olCanvasMap

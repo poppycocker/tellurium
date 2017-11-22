@@ -1,0 +1,44 @@
+.rotate-control {
+  top: 20px;
+  right: 15px;
+}
+.rotate-control-large {
+  top: 20px;
+  right: 15px;
+}
+
+.ol-control .compass-button,
+.ol-control .compass-button-large {
+  background-image: url(compass_control_bg.png);
+  background-size: cover;
+  will-change:transform;
+  cursor:pointer;
+}
+.ol-control .compass-button {
+  height: 100px;
+  width: 100px;
+}
+.ol-control .compass-button-large {
+  height: 200px;
+  width: 200px;
+}
+
+.ol-control .rotate-button,
+.ol-control .rotate-button-large {
+  position: absolute;
+  margin: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-image: url(rotate_control_bg.png);
+  background-size: cover;
+}
+.ol-control .rotate-button {
+  height: 70px;
+  width: 70px;
+}
+.ol-control .rotate-button-large {
+  height: 140px;
+  width: 140px;
+}
