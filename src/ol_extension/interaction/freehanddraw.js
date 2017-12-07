@@ -1,8 +1,10 @@
 import eventCondition from 'ol/events/condition'
+import additionalEventCondition from '@@/ol_extension/events/additionalcondition'
 import Draw from 'ol/interaction/draw'
 import DrawEventType from 'ol/interaction/draweventtype'
 import GeometryType from 'ol/geom/geometrytype'
 import MapBrowserEventType from 'ol/mapbrowsereventtype'
+import { eventConditionMouseWheelDrag } from '@@/ol_extension/interaction/mousewheeldragrotate'
 
 export default class FreehandDraw extends Draw {
   constructor(options) {
@@ -28,7 +30,7 @@ export default class FreehandDraw extends Draw {
   }
 
   static handleDownEvent_(event) {
-    if (eventCondition.mouseWheelDrag(event) || eventCondition.mouseRight(event)) {
+    if (additionalEventCondition.mouseWheelDrag(event) || additionalEventCondition.mouseRight(event)) {
       return false
     }
     if (this.mode_ === GeometryType.LINE_STRING && this.condition_(event)) {

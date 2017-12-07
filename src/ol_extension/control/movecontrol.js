@@ -1,7 +1,7 @@
 import Control from 'ol/control/control'
 import Interaction from 'ol/interaction/interaction'
 import 'olex_assets/control/movecontrol/move_control.css'
-import Util from '@/util'
+import Util from '@@/util'
 
 /**
  * @classdesc

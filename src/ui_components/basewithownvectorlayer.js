@@ -1,4 +1,4 @@
-import Base from '@/ui_components/base'
+import Base from '@@/ui_components/base'
 import VectorLayer from 'ol/layer/vector'
 import VectorSource from 'ol/source/vector'
 

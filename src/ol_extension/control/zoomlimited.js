@@ -1,5 +1,5 @@
 import Zoom from 'ol/control/zoom'
-import Util from '@/util'
+import Util from '@@/util'
 import 'olex_assets/control/zoomslidercustomized/custom_zoombar.css'
 
 export default class ZoomLimited extends Zoom {

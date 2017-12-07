@@ -1,10 +1,10 @@
 import Observable from 'ol/observable'
 import Draw from 'ol/interaction/draw'
 import DragPan from 'ol/interaction/dragpan'
-import DeletableDraw from '@/ol_extension/interaction/deletabledraw'
-import FreehandDraw from '@/ol_extension/interaction/freehanddraw'
-import PadDraw from '@/ol_extension/interaction/paddraw'
-import availableMode from '@/constants/availableMode'
+import DeletableDraw from '@@/ol_extension/interaction/deletabledraw'
+import FreehandDraw from '@@/ol_extension/interaction/freehanddraw'
+import PadDraw from '@@/ol_extension/interaction/paddraw'
+import availableMode from '@@/constants/availableMode'
 import GeomPolygon from 'ol/geom/polygon'
 
 /**
@@ -141,7 +141,7 @@ export default class DrawingManager extends Observable {
    */
   _getInteractionsForMouse(mode) {
     const olVectorSource = this._layerToDraw.getSource()
-    const m = this._te.availableMode
+    const m = availableMode
     let interaction = null
     switch (mode) {
       case m.DRAW_POLYLINE:
@@ -217,7 +217,7 @@ export default class DrawingManager extends Observable {
  */
   _getInteractionsForTouch(mode) {
     const olVectorSource = this._layerToDraw.getSource()
-    const m = this._te.availableMode
+    const m = availableMode
     let interaction = null
     switch (mode) {
       case m.DRAW_POLYLINE:

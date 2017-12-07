@@ -1,18 +1,11 @@
 import eventCondition from 'ol/events/condition'
+import additionalEventCondition from '@@/ol_extension/events/additionalcondition'
 import Pointer from 'ol/interaction/pointer'
 import Interaction from 'ol/interaction/Interaction'
-import Util from '@/util'
+import Util from '@@/util'
 
 const MOUSEWHEELZOOM_MAXDELTA = 1
 const MOUSEWHEELZOOM_TIMEOUT_DURATION = 80
-
-const conditionMouseRight = function(mapBrowserEvent) {
-  // マウスのボタンがホイールがない場合、ボタンの値が変わる可能性があるかも
-  return (
-    mapBrowserEvent.pointerEvent.pointerId === 1 &&
-    mapBrowserEvent.pointerEvent.button === 2
-  )
-}
 
 export default class MouseRightDragZoom extends Pointer {
   constructor(opt_options) {
@@ -22,7 +15,7 @@ export default class MouseRightDragZoom extends Pointer {
       handleUpEvent: MouseRightDragZoom.handleUpEvent_
     })
     const options = opt_options || {}
-    this.condition_ = options.condition || conditionMouseRight
+    this.condition_ = options.condition || additionalEventCondition.mouseRight
     this.delta_ = 0
     this.prePositionY = 0
     this.duration_ = options.duration || 250

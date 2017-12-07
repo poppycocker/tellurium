@@ -1,11 +1,11 @@
-import BaseWithOwnVectorLayer from '@/ui_components/basewithownvectorlayer'
+import BaseWithOwnVectorLayer from '@@/ui_components/basewithownvectorlayer'
 import Event from 'ol/events/event'
 import Style from 'ol/style/style'
 import StrokeStyle from 'ol/style/stroke'
 import FillStyle from 'ol/style/fill'
-import Util from '@/util'
-import DrawArc, { DrawArcEventType } from '@/ol_extension/interaction/drawarc'
-import PadDrawArc from '@/ol_extension/interaction/paddrawarc'
+import Util from '@@/util'
+import DrawArc, { DrawArcEventType } from '@@/ol_extension/interaction/drawarc'
+import PadDrawArc from '@@/ol_extension/interaction/paddrawarc'
 
 /**
  * @classdesc

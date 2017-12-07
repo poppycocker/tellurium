@@ -1,16 +1,9 @@
 import eventCondition from 'ol/events/condition'
+import additionalEventCondition from '@@/ol_extension/events/additionalcondition'
 import Pointer from 'ol/interaction/pointer'
-import Interaction from 'ol/interaction/Interaction'
+import Interaction from 'ol/interaction/interaction'
 import ViewHint from 'ol/viewhint'
-import Util from '@/util'
-
-const conditionMouseWheelDrag = function(mapBrowserEvent) {
-  // マウスのボタンがホイールがない場合、ボタンの値が変わる可能性があるかも
-  return (
-    mapBrowserEvent.pointerEvent.pointerId === 1 &&
-    mapBrowserEvent.pointerEvent.button === 1
-  )
-}
+import Util from '@@/util'
 
 export default class MouseWheelDragRotate extends Pointer {
   constructor(opt_options) {
@@ -20,13 +13,13 @@ export default class MouseWheelDragRotate extends Pointer {
       handleUpEvent: MouseWheelDragRotate.handleUpEvent_
     })
     const options = opt_options || {}
-    this.condition_ = options.condition || conditionMouseWheelDrag
+    this.condition_ = options.condition || additionalEventCondition.mouseWheelDrag
     this.duration_ = options.duration || 250
     this.lastAnchor_ = null
     this.lastAngle_ = undefined
   }
 
-  static handleDragEvent_ = function(mapBrowserEvent) {
+  static handleDragEvent_(mapBrowserEvent) {
     if (!eventCondition.mouseOnly(mapBrowserEvent)) {
       return
     }
@@ -44,7 +37,7 @@ export default class MouseWheelDragRotate extends Pointer {
     this.lastAngle_ = theta
   }
 
-  static handleUpEvent_ = function(mapBrowserEvent) {
+  static handleUpEvent_(mapBrowserEvent) {
     if (!eventCondition.mouseOnly(mapBrowserEvent)) {
       return true
     }
@@ -56,7 +49,7 @@ export default class MouseWheelDragRotate extends Pointer {
     return false
   }
 
-  static handleDownEvent_ = function(mapBrowserEvent) {
+  static handleDownEvent_(mapBrowserEvent) {
     if (!eventCondition.mouseOnly(mapBrowserEvent)) {
       return false
     }

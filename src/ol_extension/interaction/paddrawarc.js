@@ -1,4 +1,4 @@
-import DrawArc, { DrawArcStatus } from '@/ol_extension/interaction/drawarc'
+import DrawArc, { DrawArcStatus } from '@@/ol_extension/interaction/drawarc'
 import MapBrowserEventType from 'ol/mapbrowsereventtype'
 import Pointer from 'ol/interaction/pointer'
 

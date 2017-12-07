@@ -3,24 +3,25 @@ import Cesium from 'cesium/Cesium'
 import OLCesium from 'olcs/olcesium'
 import 'ol/ol.css'
 import Observable from 'ol/observable'
-import availableMode from '@/constants/availableMode'
-import MoveControl from '@/ol_extension/control/movecontrol'
-import RotateControl from '@/ol_extension/control/rotatecontrol'
-import ZoomLimited from '@/ol_extension/control/zoomlimited'
-import ZoomSliderCustomized from '@/ol_extension/control/zoomslidercustomized'
-import DrawingManager from '@/drawingmanager'
-import FeaturePicker from '@/ui_components/featurepicker'
-import Measurer, { MeasuringEvent } from '@/ui_components/measure'
-import ArcGenerator, { ArcEvent } from '@/ui_components/arcgenerator'
+import availableMode from '@@/constants/availableMode'
+import MoveControl from '@@/ol_extension/control/movecontrol'
+import RotateControl from '@@/ol_extension/control/rotatecontrol'
+import ZoomLimited from '@@/ol_extension/control/zoomlimited'
+import ZoomSliderCustomized from '@@/ol_extension/control/zoomslidercustomized'
+import DrawingManager from '@@/drawingmanager'
+import FeaturePicker from '@@/ui_components/featurepicker'
+import Measurer, { MeasuringEvent } from '@@/ui_components/measure'
+import ArcGenerator, { ArcEvent } from '@@/ui_components/arcgenerator'
 import DrawEventType from 'ol/interaction/draweventtype'
-import FeatureDragEvent from '@/ol_extension/featuredragevent'
+import FeatureDragEvent from '@@/ol_extension/featuredragevent'
 import Select from 'ol/interaction/select'
-import ViewshedAnalyzer from '@/viewshedanalyzer'
+import ViewshedAnalyzer from '@@/viewshedanalyzer'
 
 // because expose-loader doesn't work.
 window.ol = ol
 window.Cesium = Cesium
 window.OLCesium = OLCesium
+export { ol, Cesium, OLCesium }
 
 class Tellurium extends Observable {
   constructor() {
@@ -36,6 +37,10 @@ class Tellurium extends Observable {
     this._olcs = olcs
     this._config = config
     const map = this._olcs.getOlMap()
+    map.addControl(new MoveControl())
+    map.addControl(new RotateControl())
+    map.addControl(new ZoomLimited(3, 18))
+    map.addControl(new ZoomSliderCustomized())
     this._drawingManager = new DrawingManager(this)
     this._featurePicker = new FeaturePicker(map)
     this._measurer = new Measurer(map)
@@ -134,7 +139,7 @@ class Tellurium extends Observable {
     this._featurePicker.layerToPick = layer
   }
 
-  get availableMode() {
+  static get availableMode() {
     return availableMode
   }
 
@@ -144,79 +149,5 @@ class Tellurium extends Observable {
 }
 
 // expose
-Tellurium.availableMode = availableMode
 window.Tellurium = Tellurium
 export default Tellurium
-
-// for test
-document.addEventListener('DOMContentLoaded', () => {
-  const olMap = new ol.Map({
-    layers: [
-      new ol.layer.Tile({
-        source: new ol.source.OSM()
-      })
-    ],
-    controls: [],
-    target: 'map',
-    view: new ol.View({
-      center: ol.proj.transform(
-        [139.691706, 35.689488],
-        'EPSG:4326',
-        'EPSG:3857'
-      ),
-      zoom: 8
-    })
-  })
-
-  const olcs = new OLCesium({
-    map: olMap
-  })
-  const scene = olcs.getCesiumScene()
-  scene.terrainProvider = new Cesium.CesiumTerrainProvider({
-    url: '//assets.agi.com/stk-terrain/world',
-    requestVertexNormals: true
-  })
-
-  const controls = [
-    new MoveControl(),
-    new RotateControl(),
-    new ZoomLimited(3, 18),
-    new ZoomSliderCustomized()
-  ]
-  controls.forEach(c => olMap.addControl(c))
-
-  const te = new Tellurium().init(olcs, {})
-  window.te = te
-
-  const layerToDraw = new ol.layer.Vector({
-    source: new ol.source.Vector(),
-    altitudeMode: 'clampToGround'
-  })
-  olMap.addLayer(layerToDraw)
-  te.layerToDraw = layerToDraw
-  te.layerToSelect = layerToDraw
-
-  te.on('drawstart', console.log)
-  te.on('drawend', console.log)
-  te.on('select', console.log)
-  te.on('movestart', console.log)
-  te.on('moveend', console.log)
-  te.on('measuring_started', console.log)
-  te.on('measure_point_added', console.log)
-  te.on('measuring_finished', console.log)
-  te.on('arc_generated', console.log)
-  te.on('arc_generated', evt => {
-    const params = Object.assign({}, evt)
-    params.radialResolution = 100
-    params.azimuthalResolution = 15
-    te.analyzeViewshed(params, result => {
-      if (result.status === 'success') {
-        console.log(`analyzeViewshed: ${result.status}`)
-        layerToDraw.getSource().addFeatures(result.features)
-      } else {
-        console.error(`analyzeViewshed: ${result.status}`)
-      }
-    })
-  })
-  // olcs.setEnabled(true)
-})

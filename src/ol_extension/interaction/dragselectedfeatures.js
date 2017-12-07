@@ -1,5 +1,5 @@
 import Pointer from 'ol/interaction/pointer'
-import FeatureDragEvent from '@/ol_extension/featuredragevent'
+import FeatureDragEvent from '@@/ol_extension/featuredragevent'
 
 // http://openlayers.org/en/v3.7.0/examples/drag-features.html
 export default class DragSelectedFeatures extends Pointer {

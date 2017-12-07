@@ -1,13 +1,13 @@
-import Base from '@/ui_components/base'
+import Base from '@@/ui_components/base'
 import eventCondition from 'ol/events/condition'
 import Style from 'ol/style/style'
 import StrokeStyle from 'ol/style/stroke'
 import FillStyle from 'ol/style/fill'
 import Select from 'ol/interaction/select'
 import DragBox from 'ol/interaction/dragbox'
-import PadDragBox from '@/ol_extension/interaction/paddragbox'
-import DragSelectedFeatures from '@/ol_extension/interaction/dragselectedfeatures'
-import FeatureDragEvent from '@/ol_extension/featuredragevent'
+import PadDragBox from '@@/ol_extension/interaction/paddragbox'
+import DragSelectedFeatures from '@@/ol_extension/interaction/dragselectedfeatures'
+import FeatureDragEvent from '@@/ol_extension/featuredragevent'
 
 /**
  * @classdesc

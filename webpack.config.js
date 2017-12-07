@@ -1,14 +1,11 @@
 const path = require('path')
 const webpack = require('webpack')
 const CopywebpackPlugin = require('copy-webpack-plugin')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
-const UglifyJSPlugin = require('uglifyjs-webpack-plugin')
-
-// The path to the Cesium source code
-const cesiumSource = 'node_modules/cesium/Source'
-const cesiumWorkers = '../Build/Cesium/Workers'
 
 const resolve = dir => path.join(__dirname, dir)
+
+// The path to the Cesium source code
+const cesiumSource = resolve('node_modules/cesium/Source')
 
 module.exports = {
   devtool: '#source-map',
@@ -32,7 +29,7 @@ module.exports = {
   },
   resolve: {
     alias: {
-      '@': resolve('src'),
+      '@@': resolve('src'),
       // Cesium module name
       cesium: path.resolve(__dirname, cesiumSource)
     },
@@ -57,13 +54,9 @@ module.exports = {
     ]
   },
   plugins: [
-    // new UglifyJSPlugin({ sourceMap: true }),
-    new HtmlWebpackPlugin({
-      template: 'sample/minimum.html'
-    }),
     // Copy Cesium Assets, Widgets, and Workers to a static directory
     new CopywebpackPlugin([
-      { from: path.join(cesiumSource, cesiumWorkers), to: 'Workers' }
+      { from: path.join(cesiumSource, '../Build/Cesium/Workers'), to: 'Workers' }
     ]),
     new CopywebpackPlugin([
       { from: path.join(cesiumSource, 'Assets'), to: 'Assets' }

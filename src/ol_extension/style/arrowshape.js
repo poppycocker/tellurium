@@ -3,7 +3,7 @@ import ImageState from 'ol/imagestate'
 import rendercanvas from 'ol/render/canvas'
 import color from 'ol/color'
 import has from 'ol/has'
-import Util from '@/util'
+import Util from '@@/util'
 
 const nullFunction = () => {}
 
