@@ -3,7 +3,7 @@ import VectorLayer from 'ol/layer/vector'
 import VectorSource from 'ol/source/vector'
 
 export default class BaseWithOwnVectorLayer extends Base {
-  constructor(olMap) {
+  constructor(olMap, layerId) {
     super(olMap)
     /**
      * 描画用ベクターレイヤー<br>
@@ -11,7 +11,11 @@ export default class BaseWithOwnVectorLayer extends Base {
      * @private
      * @type {ol.layer.Vector}
      */
-    this._layer = new VectorLayer({})
+    this._layer = new VectorLayer({
+      id: layerId,
+      altitudeMode: 'clampToGround',
+      system: true
+    })
     /**
      * ベクターソース
      * @private

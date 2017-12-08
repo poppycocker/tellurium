@@ -6,7 +6,6 @@
  * @prop {String} VIEW_3DMAP 3D地形表示・操作
  * @prop {String} PICK_FEATURE フィーチャー選択
  * @prop {String} MEASURE_DISTANCE 距離計測
- * @prop {String} DESIGNATE_RECT 矩形範囲指定
  * @prop {String} DRAW_POLYLINE ポリライン描画
  * @prop {String} DRAW_POLYLINE_FREEHAND ポリライン描画(フリーハンド)
  * @prop {String} DRAW_SQUARE 矩形(正方形)描画
@@ -24,7 +23,6 @@ const availableMode = {
   VIEW_3DMAP: 'view_3dmap',
   PICK_FEATURE: 'pick_feature',
   MEASURE_DISTANCE: 'measure_distance',
-  DESIGNATE_RECT: 'designate_rect',
   DRAW_POLYLINE: 'draw_polyline',
   DRAW_POLYLINE_FREEHAND: 'draw_polyline_freehand',
   DRAW_SQUARE: 'draw_square',
@@ -32,26 +30,26 @@ const availableMode = {
   DRAW_POLYGON: 'draw_polygon',
   DRAW_CIRCLE: 'draw_circle',
   DRAW_ELLIPSE: 'draw_ellipse',
-  DRAW_LABEL: 'draw_label',
-  DRAW_ICON: 'draw_icon',
+  DRAW_POINT: 'draw_point',
   GENERATE_ARC: 'generate_arc'
 }
 
-availableMode.isDrawing = mode => {
-  const m = availableMode
-  switch (mode) {
-    case m.DRAW_POLYLINE:
-    case m.DRAW_POLYLINE_FREEHAND:
-    case m.DRAW_SQUARE:
-    case m.DRAW_RECTANGLE:
-    case m.DRAW_POLYGON:
-    case m.DRAW_CIRCLE:
-    case m.DRAW_ELLIPSE:
-    case m.DRAW_LABEL:
-    case m.DRAW_ICON:
-      return true
+Object.defineProperty(availableMode, 'isDrawing', {
+  value: mode => {
+    const m = availableMode
+    switch (mode) {
+      case m.DRAW_POLYLINE:
+      case m.DRAW_POLYLINE_FREEHAND:
+      case m.DRAW_SQUARE:
+      case m.DRAW_RECTANGLE:
+      case m.DRAW_POLYGON:
+      case m.DRAW_CIRCLE:
+      case m.DRAW_ELLIPSE:
+      case m.DRAW_POINT:
+        return true
+    }
+    return false
   }
-  return false
-}
+})
 
 export default availableMode

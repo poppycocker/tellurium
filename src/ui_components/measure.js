@@ -9,6 +9,7 @@ import DeletableDraw from '@@/ol_extension/interaction/deletabledraw'
 import Observable from 'ol/observable'
 import Overlay from 'ol/overlay'
 import proj from 'ol/proj'
+import 'ui_components_assets/measure/tooltip.css'
 
 /**
  * @classdesc
@@ -92,48 +93,28 @@ export { MeasuringEvent }
  */
 export default class Measure extends BaseWithOwnVectorLayer {
   constructor(olMap, opt_options) {
-    super(olMap)
+    super(olMap, 'measure_distance')
     this._wgs84Sphere = new Sphere(6378137)
     const options = opt_options || {}
-    const layerStyle =
-      options.layerStyle ||
-      new Style({
+    const defaultStyle = new Style({
+      fill: new FillStyle({
+        color: '#ffcc33'
+      }),
+      stroke: new StrokeStyle({
+        color: '#ffcc33',
+        lineDash: [10, 10],
+        width: 3
+      }),
+      image: new CircleStyle({
+        radius: 8,
         fill: new FillStyle({
-          color: 'rgba(255, 255, 255, 0.2)'
-        }),
-        stroke: new StrokeStyle({
-          color: '#ffcc33',
-          width: 2
-        }),
-        image: new CircleStyle({
-          radius: 7,
-          fill: new FillStyle({
-            color: '#ffcc33'
-          })
+          color: '#ffcc33'
         })
       })
+    })
+    const layerStyle = options.layerStyle || defaultStyle
     this._layer.setStyle(layerStyle)
-    this._interactionStyle =
-      options.interactionStyle ||
-      new Style({
-        fill: new FillStyle({
-          color: 'rgba(255, 255, 255, 0.2)'
-        }),
-        stroke: new StrokeStyle({
-          color: 'rgba(0, 0, 0, 0.5)',
-          lineDash: [10, 10],
-          width: 2
-        }),
-        image: new CircleStyle({
-          radius: 5,
-          stroke: new StrokeStyle({
-            color: 'rgba(0, 0, 0, 0.7)'
-          }),
-          fill: new FillStyle({
-            color: 'rgba(255, 255, 255, 0.2)'
-          })
-        })
-      })
+    this._interactionStyle = options.interactionStyle || defaultStyle
     /**
      * Currently drawn feature.
      * @type {ol.Feature}

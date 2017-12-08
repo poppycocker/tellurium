@@ -90,7 +90,7 @@ const MAX_RADIUS = 1000.0 * 1000
  */
 export default class Arc extends BaseWithOwnVectorLayer {
   constructor(olMap, opt_options) {
-    super(olMap)
+    super(olMap, 'arc_generator')
     const options = opt_options || {}
     const style =
       options.style ||

@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28 28" height="28" width="28"><title>triangle-15.svg</title><rect fill="none" x="0" y="0" width="28" height="28"></rect><rect x="4" y="4" rx="3" ry="3" width="19" height="19" stroke="#bd4d4d" style="stroke-linejoin:round;stroke-miterlimit:4;" fill="#bd4d4d" stroke-width="4"></rect><rect x="4" y="4" width="19" height="19" rx="3" ry="3" fill="#fff"></rect><path fill="#fff" transform="translate(6 6)" d="M7.5385,2
+	C7.2437,2,7.0502,2.1772,6.9231,2.3846l-5.8462,9.5385C1,12,1,12.1538,1,12.3077C1,12.8462,1.3846,13,1.6923,13h11.6154
+	C13.6923,13,14,12.8462,14,12.3077c0-0.1538,0-0.2308-0.0769-0.3846L8.1538,2.3846C8.028,2.1765,7.7882,2,7.5385,2z" style="stroke-linejoin:round;stroke-miterlimit:4;" stroke="#fff" stroke-width="5"></path><path fill="#bd4d4d" transform="translate(6 6)" d="M7.5385,2
+	C7.2437,2,7.0502,2.1772,6.9231,2.3846l-5.8462,9.5385C1,12,1,12.1538,1,12.3077C1,12.8462,1.3846,13,1.6923,13h11.6154
+	C13.6923,13,14,12.8462,14,12.3077c0-0.1538,0-0.2308-0.0769-0.3846L8.1538,2.3846C8.028,2.1765,7.7882,2,7.5385,2z"></path></svg>

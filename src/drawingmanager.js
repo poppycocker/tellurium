@@ -191,13 +191,7 @@ export default class DrawingManager extends Observable {
           geometryFunction: this._ellipseGeomFunc
         })
         break
-      case m.DRAW_LABEL:
-        interaction = new Draw({
-          source: olVectorSource,
-          type: 'Point'
-        })
-        break
-      case m.DRAW_ICON:
+      case m.DRAW_POINT:
         interaction = new Draw({
           source: olVectorSource,
           type: 'Point'

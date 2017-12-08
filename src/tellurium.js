@@ -1,4 +1,7 @@
+import axios from 'axios'
+import querystring from 'querystring'
 import ol from 'olreunion'
+import olEvents from 'ol/events'
 import Cesium from 'cesium/Cesium'
 import OLCesium from 'olcs/olcesium'
 import 'ol/ol.css'
@@ -16,12 +19,18 @@ import DrawEventType from 'ol/interaction/draweventtype'
 import FeatureDragEvent from '@@/ol_extension/featuredragevent'
 import Select from 'ol/interaction/select'
 import ViewshedAnalyzer from '@@/viewshedanalyzer'
+import CrossSectionAnalyzer from '@@/crosssectionanalyzer'
+import FormatGeoJSONWithCircle from '@@/ol_extension/format/geojsonwithcircle'
 
 // because expose-loader doesn't work.
 window.ol = ol
 window.Cesium = Cesium
 window.OLCesium = OLCesium
 export { ol, Cesium, OLCesium }
+
+const API_ENDPOINT_NOMINATIM = ' http://nominatim.openstreetmap.org'
+const API_ENDPOINT_GRAPHHOPPER_ROUTE = 'https://graphhopper.com/api/1/route'
+const GRAPHHOPPER_API_KEY = 'ca179d62-2cec-4a92-b731-2cc7389046db'
 
 class Tellurium extends Observable {
   constructor() {
@@ -31,6 +40,8 @@ class Tellurium extends Observable {
     this._drawingManager = null
     this._featurePicker = null
     this._measurer = null
+    this._mode = availableMode.VIEW_2DMAP
+    this._engineGeoJson = new FormatGeoJSONWithCircle()
   }
 
   init(olcs, config) {
@@ -48,7 +59,12 @@ class Tellurium extends Observable {
     this._viewshedAnalyzer = new ViewshedAnalyzer(
       olcs.getCesiumScene().terrainProvider
     )
+    this._crossSectionAnalyzer = new CrossSectionAnalyzer(
+      olcs.getCesiumScene().terrainProvider
+    )
     this._setListenerRelay()
+    this.mode = availableMode.VIEW_2DMAP
+
     return this
   }
 
@@ -97,8 +113,7 @@ class Tellurium extends Observable {
       case m.DRAW_POLYGON:
       case m.DRAW_CIRCLE:
       case m.DRAW_ELLIPSE:
-      case m.DRAW_LABEL:
-      case m.DRAW_ICON:
+      case m.DRAW_POINT:
         this._drawingManager.mode = mode
         break
       case m.PICK_FEATURE:
@@ -110,7 +125,6 @@ class Tellurium extends Observable {
       case m.GENERATE_ARC:
         this._arcGenerator.activate()
         break
-      case m.DESIGNATE_RECT:
       default:
         console.warn(`${mode} is not implemented.`)
         break
@@ -123,6 +137,14 @@ class Tellurium extends Observable {
     this._mode = mode
   }
 
+  get drawingStyle() {
+    return this._drawingManager.style
+  }
+
+  set drawingStyle(olStyle) {
+    this._drawingManager.style = olStyle
+  }
+
   get layerToDraw() {
     return this._drawingManager.layerToDraw
   }
@@ -131,12 +153,16 @@ class Tellurium extends Observable {
     this._drawingManager.layerToDraw = layer
   }
 
-  get layerToSelect() {
-    return this._featurePicker.layerToSelect
+  get layerToPick() {
+    return this._featurePicker.layerToPick
   }
 
-  set layerToSelect(layer) {
+  set layerToPick(layer) {
     this._featurePicker.layerToPick = layer
+  }
+
+  get pickedFeatures() {
+    return this._featurePicker.features
   }
 
   static get availableMode() {
@@ -145,6 +171,142 @@ class Tellurium extends Observable {
 
   analyzeViewshed(params, callback) {
     this._viewshedAnalyzer.requestViewshed(params, callback)
+  }
+
+  analyzeCrossSection(params, callback) {
+    this._crossSectionAnalyzer.requestCrossSection(params, callback)
+  }
+
+  findLayerById(id) {
+    const layers = this._olcs
+      .getOlMap()
+      .getLayers()
+      .getArray()
+    return layers.find(layer => layer.get('id') === id)
+  }
+
+  flyTo(center, zoom, duration = 1500, done = () => {}) {
+    const view = this.olcs.getOlMap().getView()
+    view.cancelAnimations()
+    const currentZoom = view.getZoom()
+    let parts = 2
+    let called = false
+    const callback = complete => {
+      --parts
+      if (called) {
+        return
+      }
+      if (parts === 0 || !complete) {
+        called = true
+        done(complete)
+      }
+    }
+    view.animate(
+      {
+        center,
+        duration
+      },
+      callback
+    )
+    view.animate(
+      {
+        zoom: currentZoom - 1,
+        duration: duration * 1 / 4
+      },
+      {
+        zoom: zoom,
+        duration: duration * 3 / 4
+      },
+      callback
+    )
+  }
+
+  static to4326(coord3857) {
+    if (coord3857.length === 2) {
+      return ol.proj.transform(coord3857, 'EPSG:3857', 'EPSG:4326')
+    }
+    // extent
+    const lb3857 = coord3857.slice(0, 2)
+    const rt3857 = coord3857.slice(2, 4)
+    return [...Tellurium.to4326(lb3857), ...Tellurium.to4326(rt3857)]
+  }
+
+  static to3857(coord4326) {
+    if (coord4326.length === 2) {
+      return ol.proj.transform(coord4326, 'EPSG:4326', 'EPSG:3857')
+    }
+    // extent
+    const lb4326 = coord4326.slice(0, 2)
+    const rt4326 = coord4326.slice(2, 4)
+    return [...Tellurium.to3857(lb4326), ...Tellurium.to3857(rt4326)]
+  }
+
+  geocode(token, query, callback, ctx) {
+    const map = this.olcs.getOlMap()
+    const viewExtent = map.getView().calculateExtent(map.getSize())
+    axios
+      .get(API_ENDPOINT_NOMINATIM, {
+        params: {
+          // token: token,
+          format: 'json',
+          q: query,
+          countrycodes: 'jp',
+          limit: 10,
+          viewboxlbrt: Tellurium.to4326(viewExtent).join(',')
+        },
+        timeout: 10000
+        // withCredentials: true
+      })
+      .then(response => {
+        callback.call(ctx, {
+          success: true,
+          data: response.data || []
+        })
+      })
+      .catch(error => {
+        callback.call(ctx, {
+          success: false,
+          error: error
+        })
+      })
+  }
+
+  route(token, points, vehicleType, callback, ctx) {
+    axios
+      .get(API_ENDPOINT_GRAPHHOPPER_ROUTE, {
+        params: {
+          // token: token,
+          type: 'json',
+          point: points,
+          vehicle: vehicleType,
+          // locale: 'ja',
+          points_encoded: false,
+          key: GRAPHHOPPER_API_KEY
+        },
+        paramsSerializer: params => querystring.stringify(params),
+        timeout: 10000
+        // withCredentials: true
+      })
+      .then(response => {
+        callback.call(ctx, {
+          success: true,
+          data: response.data || []
+        })
+      })
+      .catch(error => {
+        callback.call(ctx, {
+          success: false,
+          error: error
+        })
+      })
+  }
+
+  geojsonFromFeature(features) {
+    return this._engineGeoJson.writeFeatures(features)
+  }
+
+  unlistenAll() {
+    olEvents.unlistenAll(this)
   }
 }
 
