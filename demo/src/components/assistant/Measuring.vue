@@ -46,10 +46,10 @@ export default {
     }
   },
   mounted() {
-    hub.$on('measuring_started', this.onReceiveMeasuringEvent.bind(this))
-    hub.$on('measure_point_added', this.onReceiveMeasuringEvent.bind(this))
-    hub.$on('measuring_finished', this.onReceiveMeasuringEvent.bind(this))
-    hub.$on('analyze_crosssection_finished', this.onAnalyzeCrossSectionFinished.bind(this))
+    hub.$on('measuring_started', this.onReceiveMeasuringEvent)
+    hub.$on('measure_point_added', this.onReceiveMeasuringEvent)
+    hub.$on('measuring_finished', this.onReceiveMeasuringEvent)
+    hub.$on('analyze_crosssection_finished', this.onAnalyzeCrossSectionFinished)
   },
   methods: {
     onReceiveMeasuringEvent(evt) {

@@ -58,9 +58,9 @@ export default {
     }
   },
   mounted() {
-    hub.$on('layer_added', this.onLayerAdded.bind(this))
-    hub.$on('layer_removed', this.onLayerRemoved.bind(this))
-    hub.$on('layer_list_updated', this.onLayerListUpdated.bind(this))
+    hub.$on('layer_added', this.onLayerAdded)
+    hub.$on('layer_removed', this.onLayerRemoved)
+    hub.$on('layer_list_updated', this.onLayerListUpdated)
     hub.$emit('layer_list_requested')
   },
   methods: {

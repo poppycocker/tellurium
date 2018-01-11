@@ -2,10 +2,12 @@
   <el-container>
     <el-aside :width="'24.5em'">
       <el-tabs v-model="activeTab">
+        <el-tab-pane label="レイヤー" name="layer">
+          <layers class="controller" />
+        </el-tab-pane>
         <el-tab-pane label="描画・解析" name="draw_n_analysis">
           <mode-selector class="mode-selector" />
           <router-view class="controller" :styleProps="currentStyle" />
-          <layers class="controller" />
         </el-tab-pane>
         <el-tab-pane label="地点・ルート検索" name="search">
           <searcher :user="user" class="controller" />

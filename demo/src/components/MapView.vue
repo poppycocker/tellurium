@@ -60,6 +60,7 @@ export default {
     setListeners() {
       hub.$on('mode_selected', (mode) => (this.te.mode = mode))
       hub.$on('drawing_style_changed', this.applyDrawingStyle)
+      hub.$on('remove_feature_required', this.removeFeatures)
       hub.$on('layer_list_requested', this.updateLayerList)
       hub.$on('layer_state_changed', this.applyChangeToLayer)
       hub.$on('layer_selected', this.applySelectedLayer)
@@ -81,7 +82,7 @@ export default {
       const cesiumScene = this.te.olcs.getCesiumScene()
       cesiumScene.camera.moveEnd.addEventListener(this.raiseViewStateChange3d, this)
 
-      this.te.on('select', evt => hub.$emit('feature_selected', evt.selected))
+      this.te.on('select', evt => hub.$emit('features_picked', evt.selected))
       this.te.on('measuring_started', evt => hub.$emit('measuring_started', evt))
       this.te.on('measure_point_added', evt => hub.$emit('measure_point_added', evt))
       this.te.on('measuring_finished', evt => hub.$emit('measuring_finished', evt))
@@ -218,6 +219,11 @@ export default {
       } else {
         this.te.drawingStyle = olStyle
       }
+    },
+    removeFeatures(features) {
+      const source = this.te.layerToPick.getSource()
+      features.forEach(feature => source.removeFeature(feature))
+      hub.$emit('features_picked', this.te.pickedFeatures)
     },
     applyChangeToLayer(layerProps) {
       // change: id, show

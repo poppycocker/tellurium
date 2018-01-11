@@ -2,9 +2,22 @@
   <el-container>
     <el-main>
       <el-row>
-        <el-col :span="24" v-if="selected.length === 1">タイプ: {{ typeOfHead }}</el-col>
-        <el-col :span="24" v-else-if="selected.length === 0">スタイル編集するには図形を1つ選択して下さい</el-col>
-        <el-col :span="24" v-else>スタイル編集するには1つだけ選択して下さい({{ selected.length }}個選択中)</el-col>
+        <el-col :span="24" v-if="selected.length > 0">
+          <el-button type="danger"  icon="el-icon-delete" @click="onRemoveButtonClicked">{{selected.length}}個の図形を削除</el-button>
+        </el-col>
+      </el-row>
+      <el-row>
+        <el-col :span="24" v-if="selected.length === 1">
+          <p>タイプ: {{ typeOfHead }}</p>
+        </el-col>
+        <el-col :span="24" v-else>
+          <el-alert
+            title="ヒント"
+            type="info"
+            description="スタイル編集するには図形を1つだけ選択して下さい"
+            show-icon
+            :closable="false" />
+        </el-col>
       </el-row>
       <router-view :styleProps="selectedStyle" /> <!-- for style config view -->
     </el-main>
@@ -28,10 +41,10 @@ export default {
     }
   },
   mounted() {
-    hub.$on('feature_selected', this.onFeatureSelected.bind(this))
+    hub.$on('features_picked', this.onFeaturesSelected)
   },
   methods: {
-    onFeatureSelected(features) {
+    onFeaturesSelected(features) {
       this.selected = features
       if (this.selected.length === 1) {
         const feature = this.selected[0]
@@ -41,6 +54,9 @@ export default {
       } else {
         hub.$emit('multiple_feature_picked')
       }
+    },
+    onRemoveButtonClicked() {
+      hub.$emit('remove_feature_required', this.selected)
     }
   }
 }

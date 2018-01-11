@@ -6,10 +6,10 @@
           <el-tag>{{ user }}</el-tag>
         </el-col>
         <el-col :span="9">
-          <el-button type="success"　@click="onSaveClicked">データ保存</el-button>
+          <el-button type="success"　@click="onSaveClicked" icon="el-icon-upload">データ保存</el-button>
         </el-col>
         <el-col :span="9">
-          <el-button type="danger"　@click="onLogOutClicked">ログアウト</el-button>
+          <el-button type="danger"　@click="onLogOutClicked" icon="el-icon-remove">ログアウト</el-button>
         </el-col>
       </el-row>
     </el-main>

@@ -2,13 +2,8 @@
   top: 20px;
   right: 15px;
 }
-.rotate-control-large {
-  top: 20px;
-  right: 15px;
-}
 
-.ol-control .compass-button,
-.ol-control .compass-button-large {
+.ol-control .compass-button {
   background-image: url(compass_control_bg.png);
   background-size: cover;
   will-change:transform;
@@ -18,13 +13,8 @@
   height: 100px;
   width: 100px;
 }
-.ol-control .compass-button-large {
-  height: 200px;
-  width: 200px;
-}
 
-.ol-control .rotate-button,
-.ol-control .rotate-button-large {
+.ol-control .rotate-button {
   position: absolute;
   margin: auto;
   top: 0;
@@ -35,10 +25,6 @@
   background-size: cover;
 }
 .ol-control .rotate-button {
-  height: 70px;
-  width: 70px;
-}
-.ol-control .rotate-button-large {
-  height: 140px;
-  width: 140px;
+  height: 77px;
+  width: 77px;
 }
